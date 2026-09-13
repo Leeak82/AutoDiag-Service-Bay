@@ -1,0 +1,14 @@
+{
+  "name": "autodiag-service-bay",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "setup": "node setup.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

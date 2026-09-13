@@ -1,0 +1,16 @@
+ENVIRONMENT
+node_modules
+venv
+.env
+.*
+~*
+/logs/
+/cache/
+/AGENTS.md
+/CLAUDE.md
+/GEMINI.md
+/QWEN.md
+/SPEC.md
+/app/.installed
+/app/test-results/
+/app/node_modules/

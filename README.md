@@ -1,5 +1,8 @@
 # AutoDiag · Service Bay
 
+**Repository:** https://github.com/Leeak82/AutoDiag-Service-Bay  
+**Validated checkpoint:** 11/11 Node integration/simulation tests passing; saved desktop and 390×844 touch acceptance runs passing.
+
 An original hands-on automotive diagnostic simulator centered on an interactive vehicle. The first work order is a 2014 Ford F-150 3.5L that cranks but will not start. Diagnose it through connected instruments, physically carry out a repair, and verify the result.
 
 The earlier `/root/pinokio/api/Auto_Diag` contained specifications but no executable application. This implementation retains that scenario and its evidence, diagnostic-quality scoring, ordered repair, and verification requirements. It uses original SVG vehicle/tool artwork and dependency-free browser/Node code.
@@ -18,7 +21,20 @@ npm start
 
 Use the URL printed in the terminal. On the same Android device, open that localhost URL. From a different device, use Pinokio's existing proxy/access URL. The simulator itself remains bound to localhost.
 
-**Update** pulls this launcher's configured Git upstream and reruns setup. This workspace currently has no Git remote; publishing/configuring an upstream is required before fetching updates. **Reset setup** removes only the generated installation marker, never app source. Browser progress is separate; use **How to work → Start a fresh practice session** to reset a case.
+**Update** pulls this launcher's configured Git upstream and reruns setup. This published workspace tracks `origin/main` at the repository above. **Reset setup** removes only the generated installation marker, never app source. Browser progress is separate; use **How to work → Start a fresh practice session** to reset a case.
+
+## Share or clone
+
+This repository is public, so another tester can clone it directly:
+
+```sh
+git clone https://github.com/Leeak82/AutoDiag-Service-Bay.git
+cd AutoDiag-Service-Bay/app
+npm run setup
+npm start
+```
+
+The browser simulator is dependency-free at runtime apart from Node 18+ and can also be launched through Pinokio using the included launcher scripts. Browser progress is stored locally on each tester's device.
 
 ## Working in the bay
 

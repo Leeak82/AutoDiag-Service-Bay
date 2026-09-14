@@ -1,5 +1,6 @@
 # AutoDiag · Service Bay
 
+**Live app:** https://auto-diag-service-bay.onrender.com  
 **Repository:** https://github.com/Leeak82/AutoDiag-Service-Bay  
 **Validated checkpoint:** 11/11 Node integration/simulation tests passing; saved desktop and 390×844 touch acceptance runs passing.
 
@@ -7,9 +8,17 @@ An original hands-on automotive diagnostic simulator centered on an interactive 
 
 The earlier `/root/pinokio/api/Auto_Diag` contained specifications but no executable application. This implementation retains that scenario and its evidence, diagnostic-quality scoring, ordered repair, and verification requirements. It uses original SVG vehicle/tool artwork and dependency-free browser/Node code.
 
-## Start
+## Launch
 
-In Pinokio, choose **Install**, then **Start**. **Enter service bay** opens the running application. The server binds to `127.0.0.1` on an available port; the terminal prints its URL. No production dependencies are downloaded.
+Open the hosted app directly:
+
+https://auto-diag-service-bay.onrender.com
+
+The Render deployment uses the same application source and server as the repository and exposes `/api/health`, `/api/scenario`, and `/api/replay` publicly.
+
+## Start locally
+
+In Pinokio, choose **Install**, then **Start**. **Enter service bay** opens the running application. No production dependencies are downloaded.
 
 Without Pinokio (Node 18+):
 
@@ -19,13 +28,13 @@ npm run setup
 npm start
 ```
 
-Use the URL printed in the terminal. On the same Android device, open that localhost URL. From a different device, use Pinokio's existing proxy/access URL. The simulator itself remains bound to localhost.
+The server respects the `PORT` and `HOST` environment variables. By default it listens on all interfaces and prints a localhost URL for convenient same-device use.
 
-**Update** pulls this launcher's configured Git upstream and reruns setup. This published workspace tracks `origin/main` at the repository above. **Reset setup** removes only the generated installation marker, never app source. Browser progress is separate; use **How to work → Start a fresh practice session** to reset a case.
+**Update** pulls this launcher's configured Git upstream and reruns setup. **Reset setup** removes only the generated installation marker, never app source. Browser progress is separate; use **How to work → Start a fresh practice session** to reset a case.
 
 ## Share or clone
 
-This repository is public, so another tester can clone it directly:
+This repository is public, so another tester can launch the hosted app or clone it directly:
 
 ```sh
 git clone https://github.com/Leeak82/AutoDiag-Service-Bay.git
@@ -63,16 +72,24 @@ This is a simplified educational model using the user-provided nominal values an
 
 ## Programmatic API
 
-The HTTP API is local and stateless. Browser sessions use their own model; API calls do not change an open player's vehicle. `GET /api/health` reports readiness. `GET /api/scenario` returns the public work order without the injected fault. `POST /api/replay` runs an ordered action list through a fresh copy of the same simulator.
+The HTTP API is stateless. Browser sessions use their own model; API calls do not change an open player's vehicle.
+
+- `GET /api/health` reports readiness.
+- `GET /api/scenario` returns the public work order without the injected fault.
+- `POST /api/replay` runs an ordered action list through a fresh copy of the same simulator.
+
+Hosted API base:
+
+```text
+https://auto-diag-service-bay.onrender.com
+```
 
 Action types: `act` (`target`, `tool`), `ignition` (`key`), `tick` (`ms`, max 10000), `release`, `measure` (`mode`, `red`, `black`), `scope` (`red`, `black`), `scan` (`page`), `clear`, and `finish`. Measurements require actual probe IDs; manipulation actions enforce prerequisites. Response: `results`, `state`, `evidence`, `verified`, `score`.
-
-Use the port printed at startup in place of `PORT`.
 
 JavaScript:
 
 ```js
-const base = 'http://127.0.0.1:PORT';
+const base = 'https://auto-diag-service-bay.onrender.com';
 const result = await fetch(`${base}/api/replay`, {
   method: 'POST', headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({actions: [
@@ -82,28 +99,6 @@ const result = await fetch(`${base}/api/replay`, {
 }).then(r => r.json());
 console.log(result.results);
 ```
-
-Python:
-
-```python
-import json, urllib.request
-payload = {'actions': [
-    {'type': 'ignition', 'key': 'KEY ON'},
-    {'type': 'measure', 'mode': 'dc', 'red': 'bat+', 'black': 'bat-'}
-]}
-request = urllib.request.Request('http://127.0.0.1:PORT/api/replay',
-    data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json'})
-print(json.load(urllib.request.urlopen(request)))
-```
-
-Curl:
-
-```sh
-curl http://127.0.0.1:PORT/api/replay -H 'Content-Type: application/json' \
-  -d '{"actions":[{"type":"ignition","key":"KEY ON"},{"type":"measure","mode":"dc","red":"bat+","black":"bat-"}]}'
-```
-
-For direct simulation integration, import `Vehicle`, `Circuit`, `Component`, `Connector`, `pins`, `STATES`, and `CONDITIONS` from `app/public/simulation.js`. Browser UI and replay API share this exact implementation.
 
 ## Tests
 

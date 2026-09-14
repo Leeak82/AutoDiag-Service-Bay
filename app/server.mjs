@@ -20,4 +20,4 @@ const server=http.createServer(async(req,res)=>{
 });
 const host=process.env.HOST||'0.0.0.0';
 const port=Number(process.env.PORT)||0;
-server.listen(port,host,()=>console.log(`AutoDiag Service Bay listening on ${host}:${server.address().port}`));
+server.listen(port,host,()=>console.log(`AutoDiag Service Bay http://127.0.0.1:${server.address().port} (listening on ${host})`));
